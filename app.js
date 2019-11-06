@@ -47,7 +47,15 @@ const ItemCtrl = (function() {
 // UI Controller
 
 const UICtrl = (function() {
+  return {
+    populateItemsList: function(items) {
+      let html = ''
 
+      items.forEach(item) {
+        html += `<li></li>`
+      }
+    }
+  }
 })()
 
 // App Controller
@@ -56,10 +64,9 @@ const App = (function(ItemCtrl, UICtrl) {
 
   return {
     init: function() {
-      console.log('Initializing App...');
       const items = ItemCtrl.getItems()
 
-      console.log(items)
+      UICtrl.populateItemsList(items)
     }
   }
 
