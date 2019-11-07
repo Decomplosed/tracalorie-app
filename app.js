@@ -91,6 +91,7 @@ const UICtrl = (function() {
       }
     },
     addListItem: function(item) {
+      document.querySelector(UISelectors.itemList).style.display = 'block'
       const li = document.createElement('li')
       li.className = 'collection-item'
       li.id = `item-${item.id}`
