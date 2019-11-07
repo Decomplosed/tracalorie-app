@@ -36,6 +36,14 @@ const ItemCtrl = (function() {
 
       data.items.push(newItem)
     },
+    getTotalCalories: function() {
+      let total = 0
+
+      data.items.forEach((item) => {
+        total += item.calories
+        total = total + item.calories
+      })
+    },
     logData: function() {
       return data
     }
@@ -116,6 +124,8 @@ const App = (function(ItemCtrl, UICtrl) {
     if(input.name !== '' && input.calories !== '') {
       const newItem = ItemCtrl.addItem(input.name, input.calories)
       UICtrl.clearInput()
+
+      const totalCalories = ItemCtrl.getTotalCalories()
     }
       UICtrl.addListItem(newItem)
 
