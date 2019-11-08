@@ -160,7 +160,7 @@ const App = (function(ItemCtrl, UICtrl) {
     const UISelectors = UICtrl.getSelectors()
 
     document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit)
-    document.querySelector(UISelectors.itemList).addEventListener('click', itemUpdateSubmit)
+    document.querySelector(UISelectors.itemList).addEventListener('click', itemEditClick)
 
   }
 
@@ -180,7 +180,7 @@ const App = (function(ItemCtrl, UICtrl) {
     e.preventDefault()
   }
 
-  const itemUpdateSubmit = function(e) {
+  const itemEditClick = function(e) {
     if(e.target.classList.contains('edit-item')){
       const listId = e.target.parentNode.parentNode.id
       const listIdArr = listId.split('-')
