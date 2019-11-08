@@ -1,5 +1,35 @@
 // Storage Controller
 
+const StorageCtrl = (function() {
+  //Public
+  return {
+    storeItem: function(item) {
+      let items
+      
+      if(localStorage.getItem('items') === null) {
+        items = []
+        items.push(item)
+        localStorage.setItem('items', JSON.stringify(items))
+      } else {
+        items = JSON.parse(localStorage.getItem('items'))
+        items.push(item)
+        localStorage.setItem('items', JSON.stringify(items))
+      }
+    },
+    getItemsFromStorage: function() {
+      let items
+
+      if(localStorage.getItem('items') === null) {
+        items = []
+      } else {
+        items = JSON.parse(localStorage.getItem('items'))
+      }
+
+      return items
+    }
+  }
+})()
+
 // Item Controller
 
 const ItemCtrl = (function() {
@@ -13,7 +43,7 @@ const ItemCtrl = (function() {
   // Data Structure / State
 
   const data = {
-    items: [],
+    items: StorageCtrl.getItemsFromStorage(),
     currentItem: null,
     totalCalories: 0
   }
@@ -212,7 +242,7 @@ const UICtrl = (function() {
 
 // App Controller
 
-const App = (function(ItemCtrl, UICtrl) {
+const App = (function(ItemCtrl, StorageCtrl, UICtrl) {
   // Load event listeners
 
   const loadEventListeners = function() {
@@ -249,6 +279,7 @@ const App = (function(ItemCtrl, UICtrl) {
       UICtrl.showTotalCalories(totalCalories)
     }
       UICtrl.addListItem(newItem)
+      StorageCtrl.storeItem(newItem)
 
 
     e.preventDefault()
@@ -331,6 +362,6 @@ const App = (function(ItemCtrl, UICtrl) {
     }
   }
 
-})(ItemCtrl, UICtrl)
+})(ItemCtrl, StorageCtrl, UICtrl)
 
 App.init()
