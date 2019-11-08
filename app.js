@@ -35,6 +35,7 @@ const ItemCtrl = (function() {
     },
     addItem: function(name, calories) {
       let ID
+
       if(data.items.length > 0) {
         ID = data.items[data.items.length - 1].id + 1
       } else {
@@ -46,6 +47,20 @@ const ItemCtrl = (function() {
       newItem = new Item(ID, name, calories)
 
       data.items.push(newItem)
+    },
+    updateItem: function(name, calories) {
+      calories = parseInt(calories)
+
+      let found = null
+
+      data.items.forEach((item) => {
+        if(item.id === data.currentItem.id) {
+          item.name = name
+          item.calories = calories
+          found = item
+        }
+      })
+      return found
     },
     setCurrentItem: function(item) {
       data.currentItem = item
@@ -75,6 +90,7 @@ const ItemCtrl = (function() {
 const UICtrl = (function() {
   const UISelectors = {
     itemList: '#item-list',
+    listItems: '#item-list li',
     addBtn: '.add-btn',
     updateBtn: '.update-btn',
     deleteBtn: '.delete-btn',
@@ -116,6 +132,22 @@ const UICtrl = (function() {
         <a href="#" class="secondary-content"><i class="edit-item fa fa-pencil"></i></a>
       `
       document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', li)
+    },
+    updateListItem: function(item) {
+      let listItems = document.querySelectorAll(UISelectors.listItems)
+
+      lisItems = Array.from(listItems)
+
+      listItems.forEach((listItem) => {
+        const itemID = listItem.getAttribute('id')
+
+        if(itemID === `item-${item.id}`){
+          document.querySelector(`#${itemID}`).innerHTML = `
+          <strong>${item.name}: </strong> <em>${item.calories} Calories</em>
+          <a href="#" class="secondary-content"><i class="edit-item fa fa-pencil"></i></a>
+        `
+        }
+      })
     },
     clearInput: function() {
       document.querySelector(UISelectors.itemNameInput).value = ''
@@ -160,7 +192,17 @@ const App = (function(ItemCtrl, UICtrl) {
     const UISelectors = UICtrl.getSelectors()
 
     document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit)
+
+    document.addEventListener('keypress', function(e) {
+      if(e.code === 13 || e.which === 13) {
+        e.preventDefault()
+        return false
+      }
+    })
+
     document.querySelector(UISelectors.itemList).addEventListener('click', itemEditClick)
+
+    document.querySelector(UISelectors.updateBtn).addEventListener('click', itemUpdateSubmit)
 
   }
 
@@ -192,6 +234,15 @@ const App = (function(ItemCtrl, UICtrl) {
 
       UICtrl.addItemToForm()
     }
+
+    e.preventDefault()
+  }
+
+  const itemUpdateSubmit = function(e) {
+    const input = UICtrl.getItemInput()
+    const updatedItem = ItemCtrl.updateItem(input.name, input.calories)
+
+    UICtrl.updateListItem(updatedItem)
 
     e.preventDefault()
   }
