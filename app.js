@@ -57,6 +57,9 @@ const ItemCtrl = (function() {
 
       data.items.splice(index, 1)
     },
+    clearAllItems: function() {
+      data.items = []
+    },
     updateItem: function(name, calories) {
       calories = parseInt(calories)
 
@@ -104,6 +107,7 @@ const UICtrl = (function() {
     updateBtn: '.update-btn',
     deleteBtn: '.delete-btn',
     backBtn: '.back-btn',
+    clearBtn: '.clear-btn',
     itemNameInput: '#item-name',
     itemCaloriesInput: '#item-calories',
     totalCalories: '.total-calories'
@@ -172,6 +176,15 @@ const UICtrl = (function() {
       document.querySelector(UISelectors.itemCaloriesInput).value = ItemCtrl.getCurrentItem().calories
       UICtrl.showEditState()
     },
+    removeItems: function() {
+      let listItems = document.querySelectorAll(UISelectors.listItems)
+
+      listItems = Array.from(listItems)
+
+      listItems.forEach(function(item) {
+        item.remove()
+      })
+    },
     hideList: function() {
       document.querySelector(UISelectors.itemList).style.display = 'none'
     },
@@ -222,6 +235,7 @@ const App = (function(ItemCtrl, UICtrl) {
 
     document.querySelector(UISelectors.backBtn).addEventListener('click', UICtrl.clearEditState)
 
+    document.querySelector(UISelectors.clearBtn).addEventListener('click', clearAllItemsClick)
   }
 
   const itemAddSubmit = function(e) {
@@ -245,7 +259,7 @@ const App = (function(ItemCtrl, UICtrl) {
       const listId = e.target.parentNode.parentNode.id
       const listIdArr = listId.split('-')
       const id = parseInt(listIdArr[1])
-      
+
       const itemToEdit = ItemCtrl.getItemById(id) 
 
       ItemCtrl.setCurrentItem(itemToEdit)
@@ -285,6 +299,18 @@ const App = (function(ItemCtrl, UICtrl) {
     e.preventDefault()
   }
 
+  const clearAllItemsClick = function(e) {
+
+    ItemCtrl.clearAllItems()
+
+    const totalCalories = ItemCtrl.getTotalCalories()
+    UICtrl.showTotalCalories(totalCalories)
+
+    UICtrl.removeItems()
+    UICtrl.hideList()
+
+    e.preventDefault()
+  }
 
   return {
     init: function() {
