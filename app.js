@@ -48,6 +48,15 @@ const ItemCtrl = (function() {
 
       data.items.push(newItem)
     },
+    deleteItem: function(id) {
+      const ids = data.items.map(function(item) {
+        return item.id
+      })
+
+      const index = ids.indexOf(id)
+
+      data.items.splice(index, 1)
+    },
     updateItem: function(name, calories) {
       calories = parseInt(calories)
 
@@ -149,6 +158,11 @@ const UICtrl = (function() {
         }
       })
     },
+    deleteListItem: function(id) {
+      const itemID = `#item-${id}`
+      const item = document.querySelector(itemID)
+      item.remove()
+    },
     clearInput: function() {
       document.querySelector(UISelectors.itemNameInput).value = ''
       document.querySelector(UISelectors.itemCaloriesInput).value = ''
@@ -204,6 +218,8 @@ const App = (function(ItemCtrl, UICtrl) {
 
     document.querySelector(UISelectors.updateBtn).addEventListener('click', itemUpdateSubmit)
 
+    document.querySelector(UISelectors.deleteBtn).addEventListener('click', itemDeleteSubmit)
+
     document.querySelector(UISelectors.backBtn).addEventListener('click', UICtrl.clearEditState)
 
   }
@@ -250,6 +266,16 @@ const App = (function(ItemCtrl, UICtrl) {
     UICtrl.showTotalCalories(totalCalories)
 
     UICtrl.clearEditState()
+
+    e.preventDefault()
+  }
+
+  const itemDeleteSubmit = function(e) {
+    const currentItem = ItemCtrl.getCurrentItem()
+
+    ItemCtrl.deleteItem(currentItem.id)
+
+    UICtrl.deleteListItem(currentItem.id)
 
     e.preventDefault()
   }
