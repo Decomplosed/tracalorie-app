@@ -204,6 +204,8 @@ const App = (function(ItemCtrl, UICtrl) {
 
     document.querySelector(UISelectors.updateBtn).addEventListener('click', itemUpdateSubmit)
 
+    document.querySelector(UISelectors.backBtn).addEventListener('click', UICtrl.clearEditState)
+
   }
 
   const itemAddSubmit = function(e) {
