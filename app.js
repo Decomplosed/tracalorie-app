@@ -244,6 +244,11 @@ const App = (function(ItemCtrl, UICtrl) {
 
     UICtrl.updateListItem(updatedItem)
 
+    const totalCalories = ItemCtrl.getTotalCalories()
+    UICtrl.showTotalCalories(totalCalories)
+
+    UICtrl.clearEditState()
+
     e.preventDefault()
   }
 
